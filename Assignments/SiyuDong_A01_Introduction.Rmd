@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Siyu Dong"
 output: pdf_document
 ---
 
@@ -23,21 +23,24 @@ Enter answers to the questions just below the >Answer: prompt.
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
 > Answer: 
+I have few experience in these area. I used SPSS to do data analysis for my ungdergrad thesis but it was few years ago.
 
 2. Are there any components of the course about which you feel confident?
 
 > Answer: 
+Through the first class, I will say the helpful atmosphere and detailed intruction may help me a lot.
 
 3. Are there any components of the course about which you feel apprehensive?
 
 > Answer: 
-
+Just coding.
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository and that you have updated your course README file, committed those changes, and pushed them to your GitHub account. 
 
 > Answer: 
+https://github.com/ivyddong/EDA_Spring2024.git
 
 ## 3) Knitting
 When you have completed this document, click the `knit` button.This should produce a PDF copy of your markdown document. Submit this PDF to Sakai. 
