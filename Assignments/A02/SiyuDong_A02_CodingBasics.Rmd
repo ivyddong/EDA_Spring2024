@@ -39,34 +39,63 @@ median_values
 
 3.  Ask R to determine whether the mean is greater than the median.
 ```{r}
-compare_mean_and_median <- function(mean_values, sequence){
-  median_values <- median(sequence)
-  
-  if (mean_values > median_values){
-    cat("True.\n")
+mean <- mean_values
+median <- median_values
+
+compare_mean_and_median <- function(mean, median){
+  if (mean > median) {
+    print("The mean is greater than the median.")
   }
-  else{
-    cat("False.\n")
+  else if (mean < median) {
+    print("The mean is smaller than the median.")
+  }
+  else {
+    print("The mean equals to the median.")
   }
 }
+
+compare_mean_and_median(mean, median)
 ```
 
 
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. I'm generating a sequence starting from 1 and ending at 30 with a interval of 3. The final outcome was give the name as "Three_step_sequence". Details are as below:
+#1. I'm generating a sequence starting from 1 and ending at 30 with a interval of 3. 
+# The final outcome was give the name as "Three_step_sequence". Details are as below:
 Three_step_sequence <- seq(1,30,3) # Name the assigned sequence
 Three_step_sequence # Print this sequence
 
-#2. I'm trying to calculate the mean and median of the computed sequence
-mean_values <- mean(Three_step_sequence) # Name the calculation of the sequence's mean as "mean_values"
-median_values <- median(Three_step_sequence) # Name the calculation of the sequence's median as "median_values"
+#2. I'm trying to calculate the mean and median of the computed sequence.
+mean_values <- mean(Three_step_sequence) 
+# Assign the computed sequence's mean to the variable "mean_values"
+median_values <- median(Three_step_sequence) 
+# Assign the computed sequence's median to the variable "median_values"
 
 mean_values # Print the result
-median_values #Print the result
+median_values # Print the result
 
-#3. 
+#3. Do the comparison between the values of the mean and the median computed from the Three_step_sequence
+mean <- mean_values 
+# Assign the previously computed mean value to a new variable
+median <- median_values 
+# Assign the previously computed median value to a new variable
+
+compare_mean_and_median <- function(mean, median){ 
+# Create the if/else function expression and divide them into 3 scenarios to discuss
+  if (mean > median) {
+    print("The mean is greater than the median.")
+  }
+  else if (mean < median) {
+    print("The mean is smaller than the median.")
+  }
+  else {
+    print("The mean equals to the median.")
+  }
+}
+
+compare_mean_and_median(mean, median) 
+# Based on the algorithm, compare the mean and the median and then print the result
 
 ```
 
@@ -106,6 +135,7 @@ colnames(student_test_info) <- c("Name", "Score", "Status")
 student_test_info
 ```
 
+
 9.  QUESTION: How is this data frame different from a matrix?
 
 > Answer:
@@ -116,23 +146,63 @@ student_test_info
 10. Create a function with an if/else statement. Your function should take a **vector** of test scores and print (not return) whether a given test score is a passing grade of 50 or above (TRUE or FALSE). You will need to choose either the `if` and `else` statements or the `ifelse` statement. 
 ```{r}
 #Option 1
-
+check_scores <- function(student_scores){
+  for (score in student_scores) {
+    if (score >= 50) {
+      print("True")
+    }
+    else if (score < 50) {
+      print("False")
+    }
+  }
+}
 
 # Option 2
-check_scores <- function(scores){
-  ifelse(scores >= 50, True, False)
-  print(scores)
+check_pass_or_fail <- function(student_scores){
+  for (score in student_scores) {
+    ifelse(score >= 50,
+           print("True"),
+           print("False"))
+  }
 }
+  
 ```
 
 
 
 11. Apply your function to the vector with test scores that you created in number 5.
-
 ```{r basics 3}
+#Option 1
+check_scores <- function(student_scores){
+  for (score in student_scores) {
+    if (score >= 50) {
+      print("True")
+    }
+    else if (score < 50) {
+      print("False")
+    }
+  }
+}
 
+student_scores <- student_test_info$Score
+
+check_scores(student_scores)
+
+# Option 2
+check_pass_or_fail <- function(student_scores){
+  for (score in student_scores) {
+    ifelse(score >= 50,
+           print("True"),
+           print("False"))
+  }
+}
+
+student_scores <- student_test_info$Score
+
+check_pass_or_fail(student_scores)
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
 > Answer:
+They both worked!
