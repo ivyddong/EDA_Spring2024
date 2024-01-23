@@ -49,8 +49,7 @@ Visualize count data for categorical variables.
 ggplot(USGS.flow.data, aes(x = discharge.mean.approval)) +
   geom_bar()
 
-
-
+#ggplot(Dataset(the data we want to use), asethetics(how we gonna realize this), x = the specific subdataset) + the type of geometry we want to display
 ```
 
 ### Histogram (function: geom_histogram)
@@ -66,7 +65,7 @@ ggplot(USGS.flow.data) +
 ggplot(USGS.flow.data) +
   geom_histogram(aes(x = discharge.mean), binwidth = 10)
 
-#
+# Generally we use the binwidth between 5 to 10
 ggplot(USGS.flow.data) +
   geom_histogram(aes(x = discharge.mean), bins = 20)
 
@@ -87,9 +86,10 @@ An alternate to a histogram is a frequency polygon graph (distributions of value
 ```{r, fig.height = 3, fig.width = 4}
 #
 ggplot(USGS.flow.data) +
+# compare with **geom_frepoly**: geom_histogram(aes(x = gage.height.mean), bins = 50) + 
   geom_freqpoly(aes(x = gage.height.mean), bins = 50) +
   geom_freqpoly(aes(x = gage.height.min), bins = 50, color = "darkgray") +
-  geom_freqpoly(aes(x = gage.height.max), bins = 50,  lty = 2) +
+  geom_freqpoly(aes(x = gage.height.max), bins = 50,  lty = 2) + # lty = linetype, 2 for dashed line
   scale_x_continuous(limits = c(0, 10))
 
 #
