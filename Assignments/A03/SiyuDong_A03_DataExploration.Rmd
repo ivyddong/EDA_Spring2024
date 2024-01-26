@@ -144,8 +144,8 @@ ggplot(Neonics) +
 
 #try2
 ggplot(Neonics) +
-  geom_bar(aes(x = Endpoint)
-          + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)))
+  geom_bar(aes(x = Endpoint),
+           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)))
 ```
 
 > Answer:
