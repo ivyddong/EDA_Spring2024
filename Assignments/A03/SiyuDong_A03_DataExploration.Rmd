@@ -154,8 +154,11 @@ ggplot(Neonics) +
 
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018.
 
-```{r}
+```{r Coversion to date}
+class(Litter$collectDate)
+#It is factor, not a date
 
+Litter$collectDate <- as.Date(Litter$collectDate) 
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
