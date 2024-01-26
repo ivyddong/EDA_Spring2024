@@ -69,7 +69,7 @@ Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", strin
 
 5.  What are the dimensions of the dataset?
 
-```{r}
+```{r Dimension of Neonics}
 dim(Neonics)
 #The Neonics Dataset has 4623 rows
 #The Neonics Dataset has 30 columns
@@ -77,55 +77,75 @@ dim(Neonics)
 
 6.  Using the `summary` function on the "Effect" column, determine the most common effects that are studied. Why might these effects specifically be of interest?
 
-```{r}
+```{r Summarize Neonics}
 summary(Neonics$Effect)
 ```
 
 > Answer:
 The top three effects found with using the 'summary' function is **Popuplation** (1803 times), **Mortality** (1493 times), and **Behavior** (360 times). The reasons account for their high frequency could be:
 1. Study Focus: This investigation was designed with particular purpose of examing these three effects.
-2. Data Availability: When conducting the research, these three 
+2. Data Availability: When conducting the research, these three parameters are more likely to be collected.
+3. Ecological Significance: These three parameters do have their critical implications in ecological studies.
 
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: The `sort()` command can sort the output of the summary command...]
 
-```{r}
+```{r Find the six most commonly studied species}
+summary(Neonics$Species.Common.Name)
 
+sort(summary(Neonics$Species.Common.Name))
+#Just as least to most order?
 ```
 
 > Answer:
+The six most commonly studied species are: Honey Bee, Parasitic Wasp, Buff Tailed Bumblebee, Carniolan Honey Bee, Bumble Bee, Italian Honeybee. They are crucial pollinators to our ecosystem and distribute vastly. Also, studying the effects of neonicotinoids on social behavior, communication, and colony dynamics provides insights into how these pesticides may impact entire colonies.
 
 8.  Concentrations are always a numeric value. What is the class of `Conc.1..Author.` column in the dataset, and why is it not numeric?
 
-```{r}
-
+```{r Explore the class of concentrations}
+class(Neonics$Conc.1..Author.)
 ```
 
 > Answer:
+As outcome above, this value is a factor value. I think the main reason for that is when entering these concentrations data, there are different formats of them, like "0.6", "0.1/", which could not be distinguished when reading the dataset.
 
 ## Explore your data graphically (Neonics)
 
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
-```{r}
+```{r Visualize publication years in line chart}
+library(ggplot2)
+
+ggplot(Neonics) +
+  geom_freqpoly(aes(x = Publication.Year))
 
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
 
-```{r}
-
+```{r Visualize test location variance over publication years in line chart}
+ggplot(Neonics) +
+  geom_freqpoly(aes(x = Publication.Year,
+                    color = Test.Location))
 ```
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
 > Answer:
+Test locationa are selected through different time periods. From 1990 to 2000, Field natural is the top choice; from 2010 to 2020, Lab is the top choice. From 2000 to 2010, both Field natural and Lad have certain amount but changed greatly.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
 [**TIP**: Add `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))` to the end of your plot command to rotate and align the X-axis labels...]
 
 ```{r}
+#try1
+ggplot(Neonics) +
+  geom_bar(aes(x = Endpoint))
 
+#try2
+ggplot(Neonics) +
+  geom_bar(aes(x = Endpoint)
+          + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)))
 ```
 
 > Answer:
