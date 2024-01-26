@@ -1,6 +1,6 @@
 ---
 title: "Assignment 3: Data Exploration"
-author: "Student Name"
+author: "Siyu Dong"
 date: "Spring 2024"
 output: pdf_document
 geometry: margin=2.54cm
@@ -33,7 +33,19 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 1.  Check your working directory, load necessary packages (tidyverse, lubridate), and upload two datasets: the ECOTOX neonicotinoid dataset (ECOTOX_Neonicotinoids_Insects_raw.csv) and the Niwot Ridge NEON dataset for litter and woody debris (NEON_NIWO_Litter_massdata_2018-08_raw.csv). Name these datasets "Neonics" and "Litter", respectively. Be sure to include the subcommand to read strings in as factors.
 
 ```{r,  message = FALSE}
+#Check my working directory
+getwd()
 
+#Install packages and load them respectively
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("lubridate")
+library(lubridate)
+
+#Upload the datasets and assign names for them with subcommand included
+Neonics <- read.csv("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
+Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
+#I can use the read.csv("./") then Tab to find the relative data path in the console pane but not in this pane
 ```
 
 ## Learn about your system
@@ -58,17 +70,21 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 5.  What are the dimensions of the dataset?
 
 ```{r}
-
+dim(Neonics)
+#The Neonics Dataset has 4623 rows
+#The Neonics Dataset has 30 columns
 ```
 
 6.  Using the `summary` function on the "Effect" column, determine the most common effects that are studied. Why might these effects specifically be of interest?
 
 ```{r}
-
+summary(Neonics$Effect)
 ```
 
 > Answer:
-
+The top three effects found with using the 'summary' function is **Popuplation** (1803 times), **Mortality** (1493 times), and **Behavior** (360 times). The reasons account for their high frequency could be:
+1. Study Focus: This investigation was designed with particular purpose of examing these three effects.
+2. Data Availability: When conducting the research, these three 
 
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: The `sort()` command can sort the output of the summary command...]
 
