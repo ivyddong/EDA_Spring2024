@@ -37,16 +37,26 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 getwd()
 
 #Install packages and load them respectively
+<<<<<<< HEAD
 #install.packages("tidyverse")
 library(tidyverse)
 #install.packages("lubridate")
+=======
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("lubridate")
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 library(lubridate)
 
 #Upload the datasets and assign names for them with subcommand included
 Neonics <- read.csv("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
 Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
+<<<<<<< HEAD
 #I can use the read.csv("./") then Tab to find the relative data path in the console pane
 #but not in this pane
+=======
+#I can use the read.csv("./") then Tab to find the relative data path in the console pane but not in this pane
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 ## Learn about your system
@@ -54,19 +64,31 @@ Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", strin
 2.  The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicology of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information.
 
 > Answer:
+<<<<<<< HEAD
 The reason maybe that there is potential adverse effects these insecticides can have on non-target organisms, particularly pollinators such as bees and other beneficial insects. Neonicotinoids are a class of systemic insecticides commonly used in agriculture to control pests. They are absorbed by plants and can be present in various plant tissues, including nectar and pollen.It is suggested that exposure to neonicotinoids can have detrimental effects on pollinators, leading to concerns about their impact on bee populations and overall ecosystem health. Bees and other pollinators play a crucial role in the pollination of many crops and wild plants, contributing to the biodiversity of ecosystems and supporting food production.
+=======
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 
 3.  The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information.
 
 > Answer:
+<<<<<<< HEAD
 The accumulation and decomposition of litter and woody debris play significant roles in shaping the structure and functioning of forest ecosystems. It contributes to our understanding of nutrient cycling, carbon sequestration, biodiversity, and the overall resilience of forested landscapes.
+=======
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 
 4.  How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here:
 
 > Answer: 
+<<<<<<< HEAD
  1.Functional Groups and Sorting: Mass data for each collection event are measured separately for different functional groups to an accuracy of 0.01 grams. The sorting process may identify functional groups even at weights below 0.01 grams, indicating their presence, although not at detectable masses.
  2.Spatial Sampling Design: Litter and fine woody debris sampling occur at terrestrial NEON sites containing woody vegetation taller than 2m. Sampling is executed in tower plots, with the location of tower plots selected randomly within the 90% flux footprint of the primary and secondary airsheds. The number of plots sampled depends on the characteristics of the vegetation.
  3. Temportal Sampling Design: Ground traps are sampled once per year, while elevated traps have varying sampling frequencies depending on the vegetation present at the site. For deciduous forest sites, frequent sampling (1x every 2 weeks) occurs during senescence, while evergreen sites have infrequent year-round sampling (1x every 1-2 months).
+=======
+ 1.
+ 2.
+ 3. 
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 
 ## Obtain basic summaries of your data (Neonics)
 
@@ -96,7 +118,11 @@ The top three effects found with using the 'summary' function is **Popuplation**
 summary(Neonics$Species.Common.Name)
 
 sort(summary(Neonics$Species.Common.Name))
+<<<<<<< HEAD
 #Just as least-to-most order?
+=======
+#Just as least to most order?
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 > Answer:
@@ -119,10 +145,15 @@ As outcome above, this value is a factor value. I think the main reason for that
 library(ggplot2)
 
 ggplot(Neonics) +
+<<<<<<< HEAD
   geom_freqpoly(aes(x = Publication.Year)) +
   labs(title = "Publication Year Distribution",
        x = "Publication Year",
        y = "Count")
+=======
+  geom_freqpoly(aes(x = Publication.Year))
+
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
@@ -130,10 +161,14 @@ ggplot(Neonics) +
 ```{r Visualize test location variance over publication years in line chart}
 ggplot(Neonics) +
   geom_freqpoly(aes(x = Publication.Year,
+<<<<<<< HEAD
                     color = Test.Location)) +
   labs(title = "Test Location over Publication Years",
        x = "Pubulication Year",
        y = "Count")
+=======
+                    color = Test.Location))
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
@@ -145,6 +180,7 @@ Test locationa are selected through different time periods. From 1990 to 2000, F
 
 [**TIP**: Add `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))` to the end of your plot command to rotate and align the X-axis labels...]
 
+<<<<<<< HEAD
 ```{r Endpoint Distribution}
 #try1
 ggplot(Neonics) +
@@ -169,6 +205,20 @@ ggplot(Neonics) +
 NOEL and LOEL are the two most common end points. 
 The endpoint of NOEL is used for terrestial database, and is defined as the abbreviation for No-Observable-Effect-Level. In the context of ECOTOX_CodeAppendix, it refers to the highest dose or concentration of a substance at which no observable effects are detected in an experimental study, and these effects are not significantly different from the responses of control groups, as determined by the author's reported statistical test.
 The endpoint of LOEL is used for terrestial database, and is defined as the abbreviation for Lowest-Observable-Effect-Level. In the context of ECOTOX_CodeAppendix, it refers to the lowest dose or concentration of a substance at which observable effects are detected in an experimental study. 
+=======
+```{r}
+#try1
+ggplot(Neonics) +
+  geom_bar(aes(x = Endpoint))
+
+#try2
+ggplot(Neonics) +
+  geom_bar(aes(x = Endpoint),
+           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)))
+```
+
+> Answer:
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 
 ## Explore your data (Litter)
 
@@ -179,6 +229,7 @@ class(Litter$collectDate)
 #It is factor, not a date
 
 Litter$collectDate <- as.Date(Litter$collectDate) 
+<<<<<<< HEAD
 #Since the default setting for R to converse to the Date format is %Y-%m-%d or %Y/%m/%d, 
 #here I just simply use this function.
 
@@ -187,10 +238,13 @@ class(Litter$collectDate)
 
 unique(Litter$collectDate)
 #Aug 2 and 30 were sampled in August 2018
+=======
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
+<<<<<<< HEAD
 ```{r Comparison between unique and summary}
 unique(Litter$namedLocation)
 
@@ -208,10 +262,23 @@ ggplot(Litter)+
   labs(title = "Litter Types at Niwot Ridge Sites",
        x = "Litter Type",
        y = "Count")
+=======
+```{r}
+
+```
+
+> Answer:
+
+14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
+
+```{r}
+
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
+<<<<<<< HEAD
 ```{r Comparison between box plot and violin plot}
 ggplot(Litter)+
   geom_boxplot(aes(x=functionalGroup, y=dryMass)) +
@@ -224,14 +291,24 @@ ggplot(Litter)+
   labs(title = "Violin Plot for Dry Mass of Different Function Groups",
        x = "Functional Group",
        y = "Dry Mass (g)")
+=======
+```{r}
+
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
 > Answer:
+<<<<<<< HEAD
 Boxplot is simpler and more straightforward than violin plot in providing a clear representation of the median and quartiles in a concise manner, and in highlighting outliers through individual points beyond the whiskers.
+=======
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
 
 What type(s) of litter tend to have the highest biomass at these sites?
 
 > Answer:
+<<<<<<< HEAD
 Needless. The interquartile range represented by the box are rather big and it has the highest median. Meanwhile, the whiskers extend greatly among all functional groups. Additionally, there's even a outlier point which has the highest weight.
+=======
+>>>>>>> 1d2028f6d9bb0f8fe4ae704fa4a1e7e54ac80fdf
