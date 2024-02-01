@@ -43,13 +43,13 @@ vector3
 vector1[3] # 
 
 # Matrices ----
-matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # 
+matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # We dont respectivelt mention "nrow" or "ncol". The matrix would be the same.
 matrix1
-matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) #
+matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) # If using "byrow = FALSE", the matrix would be the same with matrix1
 matrix2
 matrix3 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE, # return after comma continues the line
-                  dimnames = list(c("uno", "dos", "tres", "quatro", "cinco"), 
-                                  c("un", "deux", "trois", "quatre"))) #
+                  dimnames = list(c("uno", "dos", "tres", "quatro", "cinco"), # column
+                                  c("un", "deux", "trois", "quatre"))) # row
 
 matrix1[4, ] #
 matrix1[ , 3] #
@@ -94,12 +94,21 @@ Question: In the R chunk below, write "dataframe1\$". Press `tab` after you type
 Find a ten-day forecast of temperatures (Fahrenheit) for Durham, North Carolina. Create two vectors, one representing the high temperature on each of the ten days and one representing the low.
 
 ```{r DataExercise-1a}
+F_HighTemp <- c(52, 34, 41, 29, 56, 65, 69, 69, 66, 62)
+F_LowTemp <- c(21, 18, 18, 29, 46, 57, 58, 58, 51, 42)
 
+F_Temps <- data.frame(F_HighTemp, F_LowTemp)
 ```
 
 Now, create two additional vectors that include the ten-day forecast for the high and low temperatures in Celsius. Use a function to create the two new vectors from your existing ones in Fahrenheit.
 
 ```{r DataExercise-1b}
+F_to_C <- function(f){
+  c = (5 * (f - 32))/9
+  return(c)
+}
+
+C_HighTemp <- F_to_C(F_Temps$F_HighTemp)
 
 ```
 
