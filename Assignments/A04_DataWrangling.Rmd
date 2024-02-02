@@ -113,6 +113,12 @@ write.csv(NC_PM25_2019_Selected, row.names = FALSE, file = "./Data/Processed/EPA
 ## Combine datasets
 
 7. Combine the four datasets with `rbind`. Make sure your column names are identical prior to running this code.
+```{r Combine datasets}
+#Check the identity of column names
+#Combine datasets
+NC_Air <- rbind(NC_O3_2018_Selected, NC_O3_2019_Selected, NC_PM25_2018_Selected, NC_PM25_2019_Selected)
+```
+
 
 8. Wrangle your new dataset with a pipe function (%>%) so that it fills the following conditions: 
 
@@ -131,11 +137,32 @@ write.csv(NC_PM25_2019_Selected, row.names = FALSE, file = "./Data/Processed/EPA
 11. Save your processed dataset with the following file name: "EPAair_O3_PM25_NC1819_Processed.csv"
 
 ```{r}
-#7 
-
 #8 
+NC_Air_SiteSelected <- 
+  NC_Air %>%
+  drop_na(Site.Name) %>%
+  filter(Site.Name == "Linville Falls" | Site.Name == "Durham Armory" | Site.Name == "Leggett" | Site.Name == "Hattie Avenue" |  Site.Name == "Clemmons Middle" | Site.Name == "Mendenhall School" | Site.Name == "Frying Pan Mountain" | Site.Name == "West Johnston Co." | Site.Name == "Garinger High School" | Site.Name == "Castle Hayne" | Site.Name == "Pitt Agri. Center" | Site.Name == "Bryson City" | Site.Name == "Millbrook School")
+
+NC_Air_SiteMeans <-
+  NC_Air_SiteSelected %>%
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
+  summarise(mean_AQI = mean(DAILY_AQI_VALUE),
+            mean_Latitude = mean(SITE_LATITUDE),
+            mean_Longtitude = mean(SITE_LONGITUDE))
+#Bug:`summarise()` has grouped output by 'Date', 'Site.Name', 'AQS_PARAMETER_DESC'. You can override using the `.groups` argument.
+
+#Check the format of variable Date first
+class(NC_Air_SiteMeans$Date)
+
+NC_Air_DateModified <- 
+  NC_Air_SiteMeans %>%
+  mutate(Month = month(Date),
+         Year = year(Date))
 
 #9
+NC_Air_Spread <- 
+  NC_Air_DateModified %>%
+  spread(AQS_PARAMETER_DESC, )
 
 #10
 
