@@ -162,12 +162,13 @@ NC_Air_DateModified <-
 #9
 NC_Air_Spread <- 
   NC_Air_DateModified %>%
-  spread(AQS_PARAMETER_DESC, )
+  spread(key = AQS_PARAMETER_DESC, value = mean_AQI)
 
 #10
+dimensions <- dim(NC_Air_Spread)
 
 #11
-
+write.csv(NC_Air_Spread, row.names = FALSE, file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 ```
 
 
@@ -180,7 +181,7 @@ NC_Air_Spread <-
 ```{r}
 
 #12
-
+NC_Air_Summary <-
 
 #13
 
