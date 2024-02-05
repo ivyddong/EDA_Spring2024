@@ -28,6 +28,7 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Wr
 1c. Read in all four raw data files associated with the EPA Air dataset, being sure to set string columns to be read in a factors. See the README file for the EPA air datasets for more information (especially if you have not worked with air quality data previously). 
 
 ```{r Set up}
+
 #Load packages
 library(tidyverse)
 library(lubridate)
@@ -66,6 +67,11 @@ NC_O3_2018$Date <- as.Date(NC_O3_2018$Date, format = "%m/%d/%Y")
 NC_O3_2019$Date <- as.Date(NC_O3_2019$Date, format = "%m/%d/%Y")
 NC_PM25_2018$Date <- as.Date(NC_PM25_2018$Date, format = "%m/%d/%Y")
 NC_PM25_2019$Date <- as.Date(NC_PM25_2019$Date, format = "%m/%d/%Y")
+
+class(NC_O3_2018$Date)
+class(NC_O3_2019$Date)
+class(NC_PM25_2018$Date)
+class(NC_PM25_2019$Date)
 ```
 
 4. Select the following columns: Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE
@@ -73,18 +79,22 @@ NC_PM25_2019$Date <- as.Date(NC_PM25_2019$Date, format = "%m/%d/%Y")
 #For NC_O3_2018
 NC_O3_2018_Selected <- NC_O3_2018 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+NC_O3_2018_Selected
 
 #For NC_O3_2018
 NC_O3_2019_Selected <- NC_O3_2019 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+NC_O3_2019_Selected
 
 #For NC_PM25_2018
 NC_PM25_2018_Selected <- NC_PM25_2018 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+NC_PM25_2018_Selected
 
 #For NC_PM25_2019
 NC_PM25_2019_Selected <- NC_PM25_2019 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+NC_PM25_2019_Selected
 ```
 
 
@@ -92,21 +102,27 @@ NC_PM25_2019_Selected <- NC_PM25_2019 %>%
 ```{r New cell content for PM2.5 datasets AQS}
 NC_PM25_2018_Selected <- NC_PM25_2018_Selected %>%
   mutate(AQS_PARAMETER_DESC = "PM2.5")
+NC_PM25_2018_Selected$AQS_PARAMETER_DESC
 
 NC_PM25_2019_Selected <- NC_PM25_2019_Selected %>%
   mutate(AQS_PARAMETER_DESC = "PM2.5")
+NC_PM25_2019_Selected$AQS_PARAMETER_DESC
 ```
 
 6. Save all four processed datasets in the Processed folder. Use the same file names as the raw files but replace "raw" with "processed".
 
 ```{r Save and export processed datasets}
-write.csv(NC_O3_2018_Selected, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2018_processed.csv")
+write.csv(NC_O3_2018_Selected, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_NC2018_processed.csv")
 
-write.csv(NC_O3_2019_Selected, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2019_processed.csv")
+write.csv(NC_O3_2019_Selected, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_NC2019_processed.csv")
 
-write.csv(NC_PM25_2018_Selected, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2018_processed.csv")
+write.csv(NC_PM25_2018_Selected, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_PM25_NC2018_processed.csv")
 
-write.csv(NC_PM25_2019_Selected, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2019_processed.csv")
+write.csv(NC_PM25_2019_Selected, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_PM25_NC2019_processed.csv")
 ```
 
 
@@ -116,7 +132,11 @@ write.csv(NC_PM25_2019_Selected, row.names = FALSE, file = "./Data/Processed/EPA
 ```{r Combine datasets}
 #Check the identity of column names
 #Combine datasets
-NC_Air <- rbind(NC_O3_2018_Selected, NC_O3_2019_Selected, NC_PM25_2018_Selected, NC_PM25_2019_Selected)
+NC_Air <- rbind(NC_O3_2018_Selected, 
+                NC_O3_2019_Selected, 
+                NC_PM25_2018_Selected, 
+                NC_PM25_2019_Selected)
+NC_Air
 ```
 
 
@@ -136,12 +156,19 @@ NC_Air <- rbind(NC_O3_2018_Selected, NC_O3_2019_Selected, NC_PM25_2018_Selected,
 
 11. Save your processed dataset with the following file name: "EPAair_O3_PM25_NC1819_Processed.csv"
 
-```{r}
+```{r Wrangle new dataset}
 #8 
 NC_Air_SiteSelected <- 
   NC_Air %>%
   drop_na(Site.Name) %>%
-  filter(Site.Name == "Linville Falls" | Site.Name == "Durham Armory" | Site.Name == "Leggett" | Site.Name == "Hattie Avenue" |  Site.Name == "Clemmons Middle" | Site.Name == "Mendenhall School" | Site.Name == "Frying Pan Mountain" | Site.Name == "West Johnston Co." | Site.Name == "Garinger High School" | Site.Name == "Castle Hayne" | Site.Name == "Pitt Agri. Center" | Site.Name == "Bryson City" | Site.Name == "Millbrook School")
+  filter(Site.Name == "Linville Falls" | Site.Name == "Durham Armory" | 
+         Site.Name == "Leggett" | Site.Name == "Hattie Avenue" |  
+         Site.Name == "Clemmons Middle" | Site.Name == "Mendenhall School" | 
+         Site.Name == "Frying Pan Mountain" | Site.Name == "West Johnston Co." | 
+         Site.Name == "Garinger High School" | Site.Name == "Castle Hayne" | 
+         Site.Name == "Pitt Agri. Center" | Site.Name == "Bryson City" | 
+         Site.Name == "Millbrook School")
+NC_Air_SiteSelected
 
 NC_Air_SiteMeans <-
   NC_Air_SiteSelected %>%
@@ -149,26 +176,27 @@ NC_Air_SiteMeans <-
   summarise(mean_AQI = mean(DAILY_AQI_VALUE),
             mean_Latitude = mean(SITE_LATITUDE),
             mean_Longtitude = mean(SITE_LONGITUDE))
-#Bug:`summarise()` has grouped output by 'Date', 'Site.Name', 'AQS_PARAMETER_DESC'. You can override using the `.groups` argument.
+NC_Air_SiteMeans
 
-#Check the format of variable Date first
-class(NC_Air_SiteMeans$Date)
-
+class(NC_Air_SiteMeans$Date) #Check the format of variable Date first
 NC_Air_DateModified <- 
   NC_Air_SiteMeans %>%
   mutate(Month = month(Date),
          Year = year(Date))
+NC_Air_DateModified
 
 #9
 NC_Air_Spread <- 
   NC_Air_DateModified %>%
   spread(key = AQS_PARAMETER_DESC, value = mean_AQI)
+NC_Air_Spread
 
 #10
-dimensions <- dim(NC_Air_Spread)
+dim(NC_Air_Spread)
 
 #11
-write.csv(NC_Air_Spread, row.names = FALSE, file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+write.csv(NC_Air_Spread, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 ```
 
 
@@ -178,16 +206,32 @@ write.csv(NC_Air_Spread, row.names = FALSE, file = "./Data/Processed/EPAair_O3_P
 
 13. Call up the dimensions of the summary dataset.
 
-```{r}
+```{r Generate summary tables}
 
 #12
-NC_Air_Summary <-
+NC_Air_Summary <- 
+  NC_Air_Spread %>%
+  group_by(Site.Name, Month, Year) %>%
+  summarise(mean_OZONE = mean(Ozone),
+            mean_PM25 = mean(PM2.5)) %>%
+  drop_na(mean_OZONE)
+NC_Air_Summary
+
+NC_Air_Summary2 <- 
+  NC_Air_Spread %>%
+  group_by(Site.Name, Month, Year) %>%
+  summarise(mean_OZONE = mean(Ozone),
+            mean_PM25 = mean(PM2.5)) %>%
+  na.omit(mean_OZONE)
+NC_Air_Summary2
 
 #13
+dim(NC_Air_Summary)
 
-
+dim(NC_Air_Summary2)
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`? Hint: replace `drop_na` with `na.omit` in part 12 and observe what happens with the dimensions of the summary date frame.
 
 > Answer: 
+When I use na.omit, NA values in mean_PM25 are deleted as well. So `drop_na` only focuses on the target row and removing its missing values, while `na.omit` influences other rows as well.
