@@ -79,22 +79,18 @@ class(NC_PM25_2019$Date)
 #For NC_O3_2018
 NC_O3_2018_Selected <- NC_O3_2018 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
-NC_O3_2018_Selected
 
 #For NC_O3_2018
 NC_O3_2019_Selected <- NC_O3_2019 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
-NC_O3_2019_Selected
 
 #For NC_PM25_2018
 NC_PM25_2018_Selected <- NC_PM25_2018 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
-NC_PM25_2018_Selected
 
 #For NC_PM25_2019
 NC_PM25_2019_Selected <- NC_PM25_2019 %>%
   select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
-NC_PM25_2019_Selected
 ```
 
 
@@ -102,11 +98,11 @@ NC_PM25_2019_Selected
 ```{r New cell content for PM2.5 datasets AQS}
 NC_PM25_2018_Selected <- NC_PM25_2018_Selected %>%
   mutate(AQS_PARAMETER_DESC = "PM2.5")
-NC_PM25_2018_Selected$AQS_PARAMETER_DESC
+head(NC_PM25_2018_Selected$AQS_PARAMETER_DESC, 10) #To display the first ten values
 
 NC_PM25_2019_Selected <- NC_PM25_2019_Selected %>%
   mutate(AQS_PARAMETER_DESC = "PM2.5")
-NC_PM25_2019_Selected$AQS_PARAMETER_DESC
+head(NC_PM25_2019_Selected$AQS_PARAMETER_DESC, 10) #To display the first ten values
 ```
 
 6. Save all four processed datasets in the Processed folder. Use the same file names as the raw files but replace "raw" with "processed".
@@ -136,7 +132,7 @@ NC_Air <- rbind(NC_O3_2018_Selected,
                 NC_O3_2019_Selected, 
                 NC_PM25_2018_Selected, 
                 NC_PM25_2019_Selected)
-NC_Air
+dim(NC_Air) #To show the total variable amount equals to the sum of the four selected datasets'
 ```
 
 
@@ -168,7 +164,6 @@ NC_Air_SiteSelected <-
          Site.Name == "Garinger High School" | Site.Name == "Castle Hayne" | 
          Site.Name == "Pitt Agri. Center" | Site.Name == "Bryson City" | 
          Site.Name == "Millbrook School")
-NC_Air_SiteSelected
 
 NC_Air_SiteMeans <-
   NC_Air_SiteSelected %>%
@@ -176,20 +171,20 @@ NC_Air_SiteMeans <-
   summarise(mean_AQI = mean(DAILY_AQI_VALUE),
             mean_Latitude = mean(SITE_LATITUDE),
             mean_Longtitude = mean(SITE_LONGITUDE))
-NC_Air_SiteMeans
+head(NC_Air_SiteMeans, 5) #To display the first 5 obs of the df
 
 class(NC_Air_SiteMeans$Date) #Check the format of variable Date first
 NC_Air_DateModified <- 
   NC_Air_SiteMeans %>%
   mutate(Month = month(Date),
          Year = year(Date))
-NC_Air_DateModified
+head(NC_Air_DateModified, 5) #To display the first 5 obs of the df
 
 #9
 NC_Air_Spread <- 
   NC_Air_DateModified %>%
   spread(key = AQS_PARAMETER_DESC, value = mean_AQI)
-NC_Air_Spread
+head(NC_Air_Spread, 5) #To display the first 5 obs of the df
 
 #10
 dim(NC_Air_Spread)
@@ -215,7 +210,7 @@ NC_Air_Summary <-
   summarise(mean_OZONE = mean(Ozone),
             mean_PM25 = mean(PM2.5)) %>%
   drop_na(mean_OZONE)
-NC_Air_Summary
+head(NC_Air_Summary, 5) #To display the first 5 obs of the df
 
 NC_Air_Summary2 <- 
   NC_Air_Spread %>%
@@ -223,7 +218,7 @@ NC_Air_Summary2 <-
   summarise(mean_OZONE = mean(Ozone),
             mean_PM25 = mean(PM2.5)) %>%
   na.omit(mean_OZONE)
-NC_Air_Summary2
+head(NC_Air_Summary2, 5) #To display the first 5 obs of the df
 
 #13
 dim(NC_Air_Summary)
