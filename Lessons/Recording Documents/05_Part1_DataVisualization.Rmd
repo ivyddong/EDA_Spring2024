@@ -88,26 +88,31 @@ print(O3plot)
 
 # Fix this code
 O3plot2 <- ggplot(EPAair) +
-  #geom_point(aes(x = Date, y = Ozone, color = "blue")) This can not give a figure with all blue dots cuz it is just adding another layer with a "blue" variable
+  #geom_point(aes(x = Date, y = Ozone, color = "blue")) This can not give a figure with all blue dots cuz it is just adding another layer with a "blue" variable. Since "blue" is not a variable within the dataset, it doesn't need to be placed within aes().
   geom_point(aes(x = Date, y = Ozone), color = "blue")
 print(O3plot2)
 
 # Add additional variables
 # How could you automatically assign a marker color to a variable? 
 PMplot <- 
-  ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year), color = Site.Name)) +
-  geom_point()
-print(PMplot)
-#Why to use "as.factor(Year)" ?
-ggplot(EPAair) +
+  ggplot(EPAair) +
   geom_point(aes(x = Month, y = PM2.5, shape = as.factor(Year), color = Site.Name))
+print(PMplot)
+#Why to use "as.factor(Year)" ? The reason for using as.factor(Year) in aes(shape = as.factor(Year)) is to treat the variable Year as a categorical variable, which allows each unique year in the dataset to be represented by a different shape in the plot. By converting Year to a factor, ggplot understands that it should treat it as a categorical variable rather than a continuous one. This helps in visually distinguishing data points belonging to different years more effectively.
+
 #Can I change the X axis to show each month like 1, 2, ..., 12?
+ggplot(EPAair) +
+  geom_point(aes(x = Month, y = PM2.5, shape = as.factor(Year), color = Site.Name)) +
+  scale_x_continuous( #a function in ggplot2 (a popular R package for data visualization) that allows you to customize the continuous scale of the x-axis in your plot.
+    breaks = 1:12, # This specifies the positions (ticks) where you want to place the breaks on the x-axis. Here, it sets breaks at each month from 1 to 12.
+    labels = month.abb[1:12]) #a built-in R variable containing the abbreviations for the months. month.abb[1:12] extracts the three-letter abbreviation for each month from January to December.
 
 # Separate plot with facets
 PMplot.faceted <-
   ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year))) +
   geom_point() +
-  facet_wrap(vars(Site.Name), nrow = 3)
+  facet_wrap(vars(Site.Name),  #vars() is a function in ggplot2 that is used to quote or select variables. When used within facet_wrap(), vars(Site.Name) tells ggplot2 to create facets based on the levels of the variable Site.Name. Essentially, it's specifying the variable by which you want to create separate plots.
+             nrow = 3) # nrow is an argument within facet_wrap() that determines the number of rows of facets to arrange on the plot. In this case, nrow = 3 specifies that the facets should be arranged in three rows. This means that if there are more than three levels of the Site.Name variable, the facets will be arranged in multiple rows to accommodate them.
 print(PMplot.faceted)
 
 # Filter dataset within plot building and facet by multiple variables
@@ -116,7 +121,7 @@ PMplot.faceted2 <-
                   Site.Name == "Bryson City"), 
          aes(x = Month, y = PM2.5)) + 
   geom_point() +
-  facet_grid(Site.Name ~ Year) 
+  facet_grid(Site.Name ~ Year)  #Two big year groups and three site groups
 print(PMplot.faceted2)
 
 # Plot true time series with geom_line
@@ -126,7 +131,6 @@ PMplot.line <-
   geom_line()
 print(PMplot.line)
 
-
 ```
 
 
@@ -135,15 +139,15 @@ print(PMplot.line)
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 # Scatterplot
 lightvsDO <- 
-  ggplot(PeterPaul.chem.nutrients, aes(x = irradianceWater, y = dissolvedOxygen)) +
-  geom_point()
+  ggplot(PeterPaul.chem.nutrients) +
+  geom_point(aes(x = irradianceWater, y = dissolvedOxygen))
 print(lightvsDO)
 
 # Adjust axes
 lightvsDOfixed <- 
-  ggplot(PeterPaul.chem.nutrients, aes(x = irradianceWater, y = dissolvedOxygen)) +
-  geom_point() +
-  xlim(0, 250) +
+  ggplot(PeterPaul.chem.nutrients) +
+  geom_point(aes(x = irradianceWater, y = dissolvedOxygen)) +
+  xlim(0, 250) + #This sets the limits of the x-axis. The x-axis will range from 0 to 250. Any data points with x-values outside this range will not be plotted.
   ylim(0, 20)
 print(lightvsDOfixed)
 
@@ -152,16 +156,33 @@ tempvsdepth <-
   ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth)) +
   #ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth, color = daynum)) +
   geom_point() +
-  scale_y_reverse()
+  scale_y_reverse() # It reverses the direction of the y-axis, so that the shallow depths are at the top and the deeper depths are at the bottom, aligning with the convention typically used in fields like limnology and oceanography.
 print(tempvsdepth)
 
 NvsP <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth)) +
-  geom_point() +
-  geom_smooth(method = lm) +
-  geom_abline(aes(slope = 16, intercept = 0))
+  geom_point() + # Adds points to the plot representing the individual data points. Each point corresponds to a combination of phosphorus and nitrogen concentrations, with its color indicating the depth.
+  geom_smooth(method = lm) + #Fits a linear regression line to the data. This argument specifies that a linear model should be used to fit the line. This line represents the overall trend between phosphorus and nitrogen concentrations.
+  geom_abline(aes(slope = 16, intercept = 0)) # Adds an abline (a straight line) to the plot with a fixed slope of 16 and intercept of 0. This line provides a reference or comparison to the regression line. The slope here is just a set value without precisely calculation.
 print(NvsP)
 
+# How to obtain the precise numerical values of the slope and other regression parameters:
+# Fit linear regression model
+lm_model <- lm(tn_ug ~ tp_ug, data = PeterPaul.chem.nutrients)
+# Print summary of the model
+summary(lm_model)
+
+# The following code wont work!
+NvsP2 <-
+  ggplot(PeterPaul.chem.nutrients) +
+  geom_point(aes(x = tp_ug, y = tn_ug, color = depth)) + 
+  geom_smooth(method = lm) + 
+print(NvsP2)
+# Reason: The error message indicates that there is an issue with the geom_smooth() layer because it requires the aesthetics x and y to be explicitly specified. However, in the ggplot() call above, you only specify the dataset and don't provide the aes() function for the geom_smooth() layer.
+# Why in other conditions, the aes argument can be put in geom_point call? What's the difference?
+# Reason: 
+# Mapping aesthetics in ggplot():When you specify aesthetics in the ggplot() function, those aesthetics are inherited by all subsequent geometric layers unless overridden. This approach is useful when you want the same aesthetic mappings to apply to multiple layers in your plot. It helps to keep your code concise and avoids repetition if the same aesthetic mappings are used across multiple layers.
+# Mapping aesthetics in individual geometric layers: You can also specify aesthetics within individual geometric layers (geom_point(), geom_line(), etc.). This approach allows you to customize aesthetics for specific layers independently of others. It's useful when you want different aesthetic mappings for different layers, or when you want to override the mappings specified in ggplot(). It provides flexibility and granularity in customizing the appearance of your plot.
 ```
 
 ### Plotting continuous vs. categorical variables
@@ -173,14 +194,19 @@ What might be more effective ways to display the information? Navigate to the bo
 # Box and whiskers plot
 Nutrientplot3 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
-  geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"?
+  #geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"? Fill will color the box while not give dots colors.
 print(Nutrientplot3)
 
 # Dot plot
 Nutrientplot4 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
-  geom_dotplot(aes(color = nutrient, fill = nutrient), binaxis = "y", binwidth = 1, 
-               stackdir = "center", position = "dodge", dotsize = 2) #
+  geom_dotplot(aes(color = nutrient, 
+                   fill = nutrient), # This maps the variable nutrient to the fill aesthetic, meaning each dot will be filled with color according to the value of the nutrient variable. When using geom_dotplot(), the dots themselves are not filled or hollow. Unlike other geometric layers like geom_point(), geom_dotplot() doesn't inherently have the concept of a "fill" aesthetic for the dots themselves.
+               binaxis = "y",  # Indicates that the binning should be along the y-axis (concentration).
+               binwidth = 1,  # Specifies the width of each bin (in this case, 1 unit along the y-axis).
+               stackdir = "center",  # Determines the direction in which the dots are stacked when they overlap. In this case, they are stacked toward the center.
+               position = "dodge",  # Specifies that the dots should be dodged (positioned side by side) rather than stacked directly on top of each other.
+               dotsize = 2) 
 print(Nutrientplot4)
 
 # Violin plot
@@ -199,6 +225,7 @@ Nutrientplot6 <-
   geom_freqpoly(aes(x = no23), color = "royalblue") +
   geom_freqpoly(aes(x = po4), color = "red") 
 print(Nutrientplot6)
+# Disadvantages of this argument: 1) There is no legend. 2) Repetition of geom_freqpoly for different nutrients.
 
 # Using a gathered dataset
 Nutrientplot7 <-   
@@ -212,8 +239,10 @@ print(Nutrientplot7)
 # Ridgeline plot
 Nutrientplot6 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(y = nutrient, x = concentration)) +
-  geom_density_ridges(aes(fill = lakename), alpha = 0.5) #
+  geom_density_ridges(aes(fill = lakename), 
+                      alpha = 0.5) #This sets the transparency of the density ridges to 50%, making them partially transparent. This helps to visualize overlapping ridges more easily.
 print(Nutrientplot6)
-
+#Ridgeline plots are especially useful when you have multiple distributions to compare, as they provide a clear visualization of the shape, spread, and overlap of the distributions.
+#Interpretation: Areas where the ridges are wider indicate higher density of values for the corresponding category. Overlapping ridges suggest similar distributions of the continuous variable across different categories.
 
 ```
