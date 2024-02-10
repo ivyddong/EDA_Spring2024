@@ -1,6 +1,6 @@
 ---
 title: "Assignment 5: Data Visualization"
-author: "Student Name"
+author: "Siyu Dong"
 date: "Spring 2024"
 output: pdf_document
 geometry: margin=2.54cm
@@ -32,9 +32,19 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r initialize project}
 #1 
+library(tidyverse)
+library(lubridate)
+library(here)
+library(cowplot)
+
+getwd()
+
+PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+NiwotRidgeLitter <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
 
 #2 
-
+NiwotRidgeLitter$collectDate <- as.Date(NiwotRidgeLitter$collectDate, format = "%Y-%m-%d")
+PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
 ```
 ## Define your theme
 3. Build a theme and set it as your default theme. Customize the look of at least two of the following: 

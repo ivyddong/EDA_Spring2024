@@ -42,29 +42,29 @@ print(O3plot)
 
 O3plot1 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_gray()
+  theme_gray() # default ggplot theme
 print(O3plot1)
 
 O3plot2 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_bw()
+  theme_bw() # classic dark on light
 print(O3plot2)
 
 O3plot3 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_light()
+  theme_light() # gray lines/axes on light background
 print(O3plot3)
 
 O3plot4 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_classic()
+  theme_classic() # classic-looking theme, with x and y axis lines and no gridlines
 print(O3plot4)
 ```
 
 Notice that some aspects of your graph have not been adjusted, including: 
 
-* text size
-* axis label colors
+* text size (default is 11)
+* axis label colors (default is black and gray)
 * legend position and justification
 
 If you would like to set a common theme across all plots in your analysis session, you may define a theme and call up that theme for each graph. This eliminates the need to add multiple lines of code in each plot. 
@@ -152,9 +152,9 @@ nationalparkcolors (package)
 * https://github.com/katiejolly/nationalparkcolors
 
 ```{r, warning = FALSE}
-# install.packages("viridis")
-# install.packages("RColorBrewer")
-# install.packages("colormap")
+install.packages("viridis")
+install.packages("RColorBrewer")
+install.packages("colormap")
 library(viridis)
 library(RColorBrewer)
 library(colormap)
@@ -206,7 +206,7 @@ In situations where facets don't fill our needs to place multiple plots on a pag
 A useful guide for aligning plots by axis can be found here: https://wilkelab.org/cowplot/articles/aligning_plots.html
 
 ```{r, fig.height = 7, fig.width = 6}
-#install.packages("cowplot")
+install.packages("cowplot")
 library(cowplot)
 plot_grid(NvsP2, Nutrientplot, nrow = 2, align = 'h', rel_heights = c(1.25, 1))
 
