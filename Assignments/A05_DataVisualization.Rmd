@@ -30,7 +30,7 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 2. Make sure R is reading dates as date format; if not change the format to date.
 
-```{r initialize project}
+```{r Initialize project}
 #1 
 library(tidyverse)
 library(lubridate)
@@ -46,6 +46,7 @@ NiwotRidgeLitter <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Proces
 NiwotRidgeLitter$collectDate <- as.Date(NiwotRidgeLitter$collectDate, format = "%Y-%m-%d")
 PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
 ```
+
 ## Define your theme
 3. Build a theme and set it as your default theme. Customize the look of at least two of the following: 
  * Plot background
@@ -54,9 +55,20 @@ PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampleda
  * Axis ticks/gridlines
  * Legend
 
-```{r build plot theme}
+```{r Build plot theme}
 #3
+library(ggplot2)
 
+ivy_theme <-  theme_classic()+
+  theme(plot.title = element_text(color = "darkblue", size = 16, face = "bold", hjust = 0.5),
+        axis.title.x = element_text(color = "darkblue", size = 12),
+        axis.title.y = element_text(color = "darkblue", size = 12),
+        legend.position = "right",
+        legend.title = element_text(color = "darkblue", size = 12),
+        legend.text = element_text(color = "darkblue", size = 10))
+
+# Set custom theme as default theme
+theme_set(ivy_theme)
 ```
 
 ## Create graphs
@@ -64,9 +76,28 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 4. [NTL-LTER] Plot total phosphorus (`tp_ug`) by phosphate (`po4`), with separate aesthetics for Peter and Paul lakes. Add line(s) of best fit using the `lm` method. Adjust your axes to hide extreme values (hint: change the limits using `xlim()` and/or `ylim()`).
 
-```{r plot total P vs PO4}
+```{r Plot total P vs PO4}
 #4 
+# First preliminarily plot  total phosphorus (`tp_ug`) by phosphate (`po4`), with separate aesthetics for Peter and Paul lakes to check if there are any extreme values.
+ggplot(PeterPaul.chem.nutrients, aes(x = po4, y = tp_ug)) +
+  geom_point()
 
+# Most of the observations have the po4 values within 50. The only extreme observation is around (po4=375, tp_ug=75), which influces the limit of x axis setting greatly. Therefore, here I set xlim to (0,50) and remain the same for tp_ug.
+ggplot(PeterPaul.chem.nutrients, aes(x = po4, y = tp_ug)) +
+  geom_point() +
+  xlim(0, 50) +
+  geom_smooth(method = lm)
+
+# Add an abline on the basis of previous plot and adjust aesthetics
+P_PointLine<- ggplot(PeterPaul.chem.nutrients, aes(x = po4, y = tp_ug)) +
+  geom_point() +
+  xlim(0, 50) +
+  geom_smooth(method = lm) +
+  geom_abline(aes(slope = 2.7, intercept = 0), alpha = 0.3) +
+  labs(title = "Total Phosphorus by Phosphate") +
+  ivy_theme
+
+print(P_PointLine)
 ```
 
 
@@ -80,6 +111,33 @@ Tips:
 
 ```{r Create boxplots}
 #5 
+NTL_LTER_BoxA <- ggplot(PeterPaul.chem.nutrients, aes(x = factor(month), y = temperature_C, color = lakename))+
+  geom_boxplot() + 
+  labs(title = "Lake Temperature by Month", x = "Month", y = "Temperature(°C)") +
+  ivy_theme
+
+NTL_LTER_BoxB <- ggplot(PeterPaul.chem.nutrients, aes(x = factor(month), y = tp_ug, color = lakename))+
+  geom_boxplot() + 
+  labs(title = "Lake Phosphorus by Month", x = "Month", y = "Total Phosphorus") +
+  ivy_theme
+
+NTL_LTER_BoxC <- ggplot(PeterPaul.chem.nutrients, aes(x = factor(month), y = tp_ug, color = lakename))+
+  geom_boxplot() + 
+  labs(title = "Lake Nitrogen by Month", x = "Month", y = "Total Nitrogen") +
+  ivy_theme
+
+library(cowplot)
+
+# Combine the individual plots
+combined_plot <- plot_grid(
+  NTL_LTER_BoxA + theme(legend.position = "none", axis.title.x = element_blank(), axis.title.y = element_blank()),
+  NTL_LTER_BoxB + theme(legend.position = "none", axis.title.x = element_blank(), axis.title.y = element_blank()),
+  NTL_LTER_BoxC + theme(axis.title.x = element_blank(), axis.title.y = element_blank()),
+  align = "hv", labels = c("A", "B", "C")
+)
+
+# Print the combined plot
+print(combined_plot)
 
 ```
 
