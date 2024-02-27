@@ -80,11 +80,14 @@ irradiance.regression <-
 # another way to format the lm() function
 irradiance.regression <- lm(
   data = PeterPaul.chem.nutrients,
-  irradianceWater ~ depth)
+  irradianceWater ~ depth) # The formula irradianceWater ~ depth specifies that we want to model the variable irradianceWater as a function of depth.
 summary(irradiance.regression)
 
 # Correlation
 cor.test(PeterPaul.chem.nutrients$irradianceWater, PeterPaul.chem.nutrients$depth)
+# This line performs a correlation test between the variables irradianceWater and depth.
+# It calculates Pearson's correlation coefficient and conducts a hypothesis test to determine if the correlation is statistically significant.
+# The result includes correlation coefficient, p-value, and confidence interval for the correlation coefficient.
 ```
 Question: How would you report the results of this test (overall findings and report of statistical output)?
 
@@ -175,7 +178,7 @@ par(mfrow = c(1,1))
 We can also make exploratory plots of several continuous data points to determine possible relationships, as well as covariance among explanatory variables. 
 
 ```{r, fig.height = 3, fig.width = 4}
-#install.packages("corrplot")
+# install.packages("corrplot")
 library(corrplot)
 PeterPaulnutrients <- 
   PeterPaul.chem.nutrients %>%
