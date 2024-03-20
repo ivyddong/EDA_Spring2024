@@ -1,7 +1,9 @@
 ---
-title: "Assignment 9: Spatial Analysis in R"
+title: 'Assignment 9: Spatial Analysis in R'
 author: "Siyu Dong"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ## OVERVIEW
@@ -24,7 +26,7 @@ This exercise accompanies the lessons in Environmental Data Analytics (ENV872L) 
 1. Import libraries: tidyverse, sf, leaflet, here, and mapview
 2. Execute the `here()` command to display the current project directory
 
-```{r Prepare workspace, error=F, warning=F}
+```{r Prepare workspace, message = FALSE, error = FALSE, warning = FALSE, echo = TRUE}
 #1. 
 library(tidyverse)
 library(sf)
@@ -44,22 +46,25 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 4. Reveal the dataset's coordinate reference system
 5. Plot the records as a map (using `mapview` or `ggplot`)
 
-```{r Read the county data into an sf dataframe}
+```{r Read the county data into an sf dataframe, message = FALSE, error = FALSE, warning = FALSE, echo = TRUE}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
 County_US <- st_read("Data/Spatial/cb_2018_us_county_20m.shp")
 County_Nebraska <- County_US[County_US$STATEFP == "31", ]
-
+```
+```{r, message = FALSE, error = FALSE, warning = FALSE, echo = TRUE}
 #4. Reveal the CRS of the counties features
 st_crs(County_Nebraska)
-
+```
+```{r}
 #5. Plot the data
 mapview(County_Nebraska)
 ```
 
+
 6. What is the EPSG code of the Counties dataset? Is this a geographic or a projected coordinate reference system? (Or, does this CRS use angular or planar coordinate units?) To what datum is this CRS associated? (Tip: look for the EPSG code on <https://spatialreference.org> and examine the link for "Well Known Text as HTML" or "Human-Readable OGC WKT"...)
 
-> ANSWER: 
-> The EPSG code of the Counties dataset is 4269. This corresponds to the North American Datum 1983 (NAD83), which is a geographic coordinate reference system (CRS). In a geographic CRS like NAD83, coordinates are measured in angular units on a spheroidal model of the Earth's surface.The NAD83 datum is associated with the GRS 1980 ellipsoid.
+>ANSWER: 
+>The EPSG code of the Counties dataset is 4269. This corresponds to the North American Datum 1983 (NAD83), which is a geographic coordinate reference system (CRS). In a geographic CRS like NAD83, coordinates are measured in angular units on a spheroidal model of the Earth's surface.The NAD83 datum is associated with the GRS 1980 ellipsoid.
 
 
 ### Read in gage locations csv as a dataframe, then display the column names it contains
@@ -80,8 +85,8 @@ colnames(NationalWater_gage_raw)
 ```
 
 9. What columns in the dataset contain the x and y coordinate values, respectively?  
-> ANSWER:
-> Based on the provided context from the README file, the columns **dec_long_va** and **dec_lat_va** contain the decimal longitude and latitude values respectively, which represent the x and y coordinate values.
+>ANSWER:
+>Based on the provided context from the README file, the columns **dec_long_va** and **dec_lat_va** contain the decimal longitude and latitude values respectively, which represent the x and y coordinate values.
 
 
 ### Convert the dataframe to a spatial features ("sf") dataframe
@@ -212,7 +217,7 @@ Now let's zoom into a particular county and examine the gages located there.
  * the selected county, 
  * and the gage sites in that county
 
-```{r spatial selection}
+```{r spatial selection, message=FALSE, warning=FALSE}
 #22 Select the county
 County_Lancaster <- subset(County_Nebraska_UTM, NAME == "Lancaster")
 
@@ -220,35 +225,11 @@ County_Lancaster <- subset(County_Nebraska_UTM, NAME == "Lancaster")
 NationalWater_gage_Lancaster <- st_intersection(NationalWater_gage_sf_UTM, County_Lancaster)
 
 #24 Plot
-# Create a map showing all Nebraska counties
-map_nebraska_counties <- mapview(County_Nebraska_UTM, col.regions = "lightblue")
-
-# Add the selected county (Lancaster) to the map
-map_with_lancaster <- map_nebraska_counties + County_Lancaster
-
-# Add the gage sites within Lancaster county to the map
-map_with_gage_sites <- map_with_lancaster + NationalWater_gage_Lancaster
-
-# Display the map
-map_with_gage_sites
-
-
-
-# Plot all Nebraska counties
-nebraska_counties_plot <- ggplot() +
+Lancaster_gage_plot <- ggplot() +
   geom_sf(data = County_Nebraska_UTM, fill = "lightgrey", color = "black") +
-  labs(title = "Nebraska Counties")
+  geom_sf(data = County_Lancaster, fill = "blue") +
+  geom_sf(data = NationalWater_gage_Lancaster, color = "red") +
+  labs(title = "Gage Sites and Height in Lancaster, Nebraska", subtitle = "By Siyu Dong")
 
-# Plot the selected county (Lancaster)
-selected_county_plot <- nebraska_counties_plot +
-  geom_sf(data = County_Lancaster, fill = "blue", color = "black") +
-  labs(title = "Nebraska Counties with Selected County (Lancaster)")
-
-# Plot the gage sites in the selected county
-final_plot <- selected_county_plot +
-  geom_sf(data = Gages_In_Lancaster, color = "red") +
-  labs(title = "Nebraska Counties with Selected County (Lancaster) and Gage Sites")
-
-# Display the final plot
-final_plot
+Lancaster_gage_plot
 ```
