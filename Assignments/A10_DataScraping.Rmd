@@ -135,18 +135,10 @@ ggplot(Durham_LWSP_df, aes(x = Date, y = MaxDayUse)) +
 
 ```{r construct.a.scraping.function}
 #6. 
-#Construct the scraping web address
-the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
-the_pwsid <- '03-32-010'
-the_year <- 2015
-the_scrape_url <- paste0(the_base_url, the_pwsid, '&year=', the_year)
-print(the_scrape_url)
-
-#Retrieve the website contents 
-the_website <- read_html(the_scrape_url)
-
-#Create our scraping function
 scrape.it <- function(the_year, the_pwsid){
+  # Construct the scraping web address
+  the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
+  the_scrape_url <- paste0(the_base_url, the_pwsid, '&year=', the_year)
   
   #Retrieve the website contents 
   the_website <- read_html(the_scrape_url)
@@ -176,6 +168,45 @@ scrape.it <- function(the_year, the_pwsid){
 }
 ```
 
+```{r}
+#Create our modified scraping function
+scrape.it2 <- function(the_year2, the_pwsid2){
+  # Construct the scraping web address
+  the_base_url2 <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
+  the_scrape_url2 <- paste0(the_base_url2, the_pwsid2, '&year=', the_year2)
+  
+  #Retrieve the website contents 
+  the_website2 <- read_html(the_scrape_url2)
+  
+  #Set the element address variables
+  the_WaterSystem_tag2 <- 'div+ table tr:nth-child(1) td:nth-child(2)'
+  the_PWSID_tag2 <- 'td tr:nth-child(1) td:nth-child(5)'
+  the_Ownership_tag2 <- 'div+ table tr:nth-child(2) td:nth-child(4)'
+  the_MaxWithdraws_tag2 <- 'th~ td+ td'
+  
+  #Scrape the data items
+  the_WaterSystem2 <- the_website2 %>% html_nodes(the_WaterSystem_tag2) %>% html_text()
+  the_PWSID2 <- the_website2 %>% html_nodes(the_PWSID_tag2) %>%  html_text()
+  the_Ownership2 <- the_website2 %>% html_nodes(the_Ownership_tag2) %>% html_text()
+  the_MaxWithdraws2 <- the_website2 %>% html_nodes(the_MaxWithdraws_tag2) %>% html_text()
+  
+  #Convert to a dataframe
+  df_withdrawals2 <- data.frame("Year" = rep(the_year2,12)) %>% 
+    mutate(WaterSystem = !!the_WaterSystem2,
+           PWSID = !!the_PWSID2,
+           Ownership = !!the_Ownership2,
+           MaxDayUse = as.numeric(the_MaxWithdraws2),
+           Date = my(paste(LWSP_Month_numeric,"-",Year)))  
+  
+  #Return the dataframe
+  return(df_withdrawals2)
+}
+
+Durham_2016 <- scrape.it2(2016, '03-32-010')
+```
+
+
+
 7. Use the function above to extract and plot max daily withdrawals for Durham (PWSID='03-32-010') for each month in 2015
 
 ```{r fetch.and.plot.Durham.2015.data}
@@ -186,8 +217,7 @@ view(Durham_2015)
 ggplot(Durham_2015, aes(x = Date, y = MaxDayUse)) + 
   geom_line() + 
   geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste(the_year, "Maximum Daily Withdrawals for", the_WaterSystem),
-       subtitle = paste("Ownership:", the_Ownership),
+  labs(title = paste("2015 Maximum Daily Withdrawals for Durham"),
        y="Withdrawal (mgd)",
        x="Date") +
   scale_x_date(date_labels = "%b", date_breaks = "1 month")
@@ -197,12 +227,6 @@ ggplot(Durham_2015, aes(x = Date, y = MaxDayUse)) +
 
 ```{r fetch.and.plot.Asheville.2015.data}
 #8 
-the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
-the_pwsid <- '01-11-010'
-the_year <- 2015
-the_scrape_url <- paste0(the_base_url, the_pwsid, '&year=', the_year)
-print(the_scrape_url)
-
 Asheville_2015 <- scrape.it(2015, '01-11-010')
 view(Asheville_2015)
 
@@ -224,23 +248,24 @@ ggplot(Comparison_2015, aes(x = Date, y = MaxDayUse, color = WaterSystem)) +
 
 ```{r fetch.and.plot.Asheville.multiyear.data }
 #9 
-#Set the inputs to scrape years 2015 to 2020 for the site "0004-0001"
+#Set the inputs to scrape years 2015 to 2021 for Asheville
 the_years = rep(2010:2021)
 my_pwsid = '01-11-010'
 
-Asheville_dfs <- lapply(X = the_years,
-                  FUN = scrape.it,
-                  the_pwsid = my_pwsid)
-
 Asheville_dfs <- map2(the_years, my_pwsid, scrape.it) 
-
-#OR, use purrr's map function
-Asheville_dfs <- map(the_years, scrape.it, the_pwsid = my_pwsid)
 
 #Conflate the returned dataframes into a single dataframe
 Asheville_df <- bind_rows(Asheville_dfs)
+
+ggplot(Asheville_df, aes(x = Date, y = MaxDayUse)) + 
+  geom_line() + 
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = paste("2010-2021 Maximum Daily Withdrawals for Asheville"),
+       y="Withdrawal (mgd)",
+       x="Date") +
+  scale_x_date(date_labels = "%Y", date_breaks = "1 year")
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
 > Answer:
->
+> With the year of 2015 as the turning point, before 2015, the water usage in Asheville slightly decreased; after 2015, it increased with a relatively rate.
